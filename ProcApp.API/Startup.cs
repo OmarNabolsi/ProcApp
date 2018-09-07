@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ProcApp.API.Data;
+using ProcApp.API.Helpers;
 
 namespace ProcApp.API
 {
@@ -30,6 +31,9 @@ namespace ProcApp.API
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
+
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IEncryptPassword, EncryptPassword>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
