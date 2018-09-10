@@ -1,3 +1,4 @@
+import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +26,7 @@ import { AuthService } from './_services/auth.service';
       HttpClientModule
    ],
    providers: [
+      ErrorInterceptorProvider,
       AuthService
    ],
    bootstrap: [
