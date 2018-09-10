@@ -20,7 +20,8 @@ namespace ProcApp.API.Helpers
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {
-                var computedHash = Encoding.UTF8.GetBytes(password);
+                var encodedPassword = Encoding.UTF8.GetBytes(password);
+                var computedHash = hmac.ComputeHash(encodedPassword);
 
                 for (int i = 0; i < computedHash.Length; i++)
                 {
