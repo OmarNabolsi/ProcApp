@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProcApp.API.Data;
 
 namespace ProcApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180912062337_ExtendedUserClass")]
+    partial class ExtendedUserClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,12 +73,6 @@ namespace ProcApp.API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Created");
-
-                    b.Property<string>("Description");
-
-                    b.Property<DateTime>("LastUpdated");
-
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
@@ -84,41 +80,11 @@ namespace ProcApp.API.Migrations
                     b.ToTable("Values");
                 });
 
-            modelBuilder.Entity("ProcApp.API.Models.ValuePhoto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateAdded");
-
-                    b.Property<string>("Description");
-
-                    b.Property<bool>("IsMain");
-
-                    b.Property<string>("Url");
-
-                    b.Property<int>("ValueId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ValueId");
-
-                    b.ToTable("ValuePhotos");
-                });
-
             modelBuilder.Entity("ProcApp.API.Models.Photo", b =>
                 {
                     b.HasOne("ProcApp.API.Models.User", "User")
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ProcApp.API.Models.ValuePhoto", b =>
-                {
-                    b.HasOne("ProcApp.API.Models.Value", "Value")
-                        .WithMany("Photos")
-                        .HasForeignKey("ValueId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

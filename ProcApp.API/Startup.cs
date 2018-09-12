@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -35,12 +36,20 @@ namespace ProcApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(opt => {
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddCors();
+
+            services.AddAutoMapper();
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IEncryptPassword, EncryptPassword>();
             services.AddScoped<ITokenBuilder, TokenBuilder>();
+
+            services.AddScoped<IValuesRepository, ValuesRepository>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
@@ -79,6 +88,7 @@ namespace ProcApp.API
             }
 
             // app.UseHttpsRedirection();
+            
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseMvc();

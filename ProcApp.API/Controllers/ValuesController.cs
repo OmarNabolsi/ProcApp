@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProcApp.API.Data;
+using ProcApp.API.Dtos;
 using ProcApp.API.Models;
 
 namespace ProcApp.API.Controllers
@@ -15,10 +17,12 @@ namespace ProcApp.API.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private readonly DataContext _context;
-        public ValuesController(DataContext context)
+        private readonly IValuesRepository _repo;
+        private readonly IMapper _mapper;
+        public ValuesController(IValuesRepository repo, IMapper mapper)
         {
-            _context = context;
+            _mapper = mapper;
+            _repo = repo;
         }
 
         // GET api/values
@@ -26,28 +30,32 @@ namespace ProcApp.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetValues()
         {
-            var values = await _context.Values.ToListAsync();
-            return Ok(values);
+            var values = await _repo.GetValues();
+
+            var valuesToReturn = _mapper.Map<IEnumerable<ValueForListDto>>(values);
+
+            return Ok(valuesToReturn);
         }
-        
+
         // GET api/values/5
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetValue(int id)
         {
-            var value = await _context.Values.SingleOrDefaultAsync(v => v.Id == id);
-            if (value == null)
-                return NotFound($"Value with Id {id} does not exist!");
-            return Ok(value);
+            var value = await _repo.GetValue(id);
+
+            var valueToReturn = _mapper.Map<ValueForDetailedDto>(value);
+
+            return Ok(valueToReturn);
         }
 
         // POST api/values
         [HttpPost]
         public async Task<IActionResult> AddValue(Value value)
         {
-            await _context.Values.AddAsync(value);
-            await _context.SaveChangesAsync();
-            return Ok(value);
+            _repo.Add(value);
+            var result = await _repo.SaveAll();
+            return Ok(result);
         }
 
         // PUT api/values/5
@@ -57,24 +65,20 @@ namespace ProcApp.API.Controllers
         //     var valueExits = await _context.Values.AnyAsync(v => v.Id == id);
         //     if (!valueExits)
         //         return NotFound("Failed to update the value!");
-            
+
         //     _context.Values.Update(value);
         //     await _context.SaveChangesAsync();
         //     return Ok(value);
         // }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteValue(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteValue(Value value)
         {
-            var valueExits = await _context.Values.AnyAsync(v => v.Id == id);
-            if (!valueExits)
-                return NotFound("Value does not exist!");
-            
-            var value = await _context.Values.FirstOrDefaultAsync(v => v.Id == id);
-            _context.Values.Remove(value);
-            await _context.SaveChangesAsync();
-            return Ok("Value was deleted successfully!");
+            _repo.Delete(value);
+            var result = await _repo.SaveAll();
+
+            return Ok(result);
         }
     }
 }
