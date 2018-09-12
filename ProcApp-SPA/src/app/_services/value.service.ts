@@ -25,4 +25,5 @@ export class ValueService {
   getValue(id): Observable<Value> {
     return this.http.get<Value>(this.baseUrl + 'values/' + id);
   }
+
 }

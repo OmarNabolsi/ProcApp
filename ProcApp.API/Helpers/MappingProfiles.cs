@@ -33,6 +33,8 @@ namespace ProcApp.API.Helpers
                 });
             CreateMap<Photo, PhotosForDetailedDto>();
             CreateMap<ValuePhoto, PhotosForDetailedDto>();
+
+            CreateMap<ValueForUpdateDto, Value>();
         }
     }
 }

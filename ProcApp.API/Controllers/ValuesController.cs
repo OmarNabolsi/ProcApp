@@ -58,18 +58,18 @@ namespace ProcApp.API.Controllers
             return Ok(result);
         }
 
-        // PUT api/values/5
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> UpdateValue(int id, Value value)
-        // {
-        //     var valueExits = await _context.Values.AnyAsync(v => v.Id == id);
-        //     if (!valueExits)
-        //         return NotFound("Failed to update the value!");
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateValue(int id, ValueForUpdateDto valueForUpdateDto) 
+        {
+            var valueFromRepo = await _repo.GetValue(id);
 
-        //     _context.Values.Update(value);
-        //     await _context.SaveChangesAsync();
-        //     return Ok(value);
-        // }
+            _mapper.Map(valueForUpdateDto, valueFromRepo);
+
+            if (await _repo.SaveAll())
+                return NoContent();
+            
+            throw new Exception($"Updating value {id} failed on save");
+        }
 
         // DELETE api/values/5
         [HttpDelete]

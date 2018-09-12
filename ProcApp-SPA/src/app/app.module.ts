@@ -1,5 +1,3 @@
-import { ValueListResolver } from './_resolvers/value-list.resolver';
-import { ValueDetailComponent } from './values/value-detail/value-detail.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +14,8 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { ValueListComponent } from './values/value-list/value-list.component';
 import { ValueCardComponent } from './values/value-card/value-card.component';
+import { ValueDetailComponent } from './values/value-detail/value-detail.component';
+import { ValueEditComponent } from './values/value-edit/value-edit.component';
 import { ListsComponent } from './lists/lists.component';
 
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
@@ -25,6 +25,9 @@ import { AuthGuard } from './_guards/auth.guard';
 import { UserService } from './_services/user.service';
 import { ValueService } from './_services/value.service';
 import { ValueDetailResolver } from './_resolvers/value-detail.resolver';
+import { ValueListResolver } from './_resolvers/value-list.resolver';
+import { ValueEditResolver } from './_resolvers/value-edit.resolver';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -39,6 +42,7 @@ export function tokenGetter() {
       ValueListComponent,
       ValueCardComponent,
       ValueDetailComponent,
+      ValueEditComponent,
       ListsComponent
    ],
    imports: [
@@ -65,7 +69,9 @@ export function tokenGetter() {
       AlertifyService,
       AuthGuard,
       ValueDetailResolver,
-      ValueListResolver
+      ValueListResolver,
+      ValueEditResolver,
+      PreventUnsavedChanges
    ],
    bootstrap: [
       AppComponent
