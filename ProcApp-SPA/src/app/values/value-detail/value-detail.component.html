@@ -1,0 +1,45 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <img class="card-img-top img-thumbnail" src="{{ value.photoUrl }}" alt="{{ value.name }}">
+        <div class="card-body">
+          <div>
+            <strong>Name:</strong>
+            <p>{{ value.name }}</p>
+          </div>
+          <div>
+            <strong>Created on:</strong>
+            <p>{{ value.created }}</p>
+          </div>
+          <div>
+            <strong>Last updated on:</strong>
+            <p>{{ value.lastUpdated }}</p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="btn-group d-flex">
+            <button class="btn btn-outline-info w-100">Like</button>
+            <button class="btn btn-outline-success w-100">Comment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="tab-panel">
+        <tabset class="value-tabset">
+          <tab heading="About {{ value?.name }}">
+            <h4>Description</h4>
+            <p>{{ value.description }}</p>
+          </tab>
+          <tab heading="Photos">
+            <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+          </tab>
+          <tab heading="Comments">
+            <p>Comments will go here</p>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+</div>

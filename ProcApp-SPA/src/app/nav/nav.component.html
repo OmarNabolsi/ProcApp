@@ -1,10 +1,7 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-info">
   <div class="container">
-    <a class="navbar-brand" [routerLink]="['/home']">Procurement App</a>
+    <a class="navbar-brand" [routerLink]="['/home']">My Values App</a>
     <ul class="navbar-nav mr-auto" *ngIf="loggedIn()">
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/home']">Home</a>
-      </li>
       <li class="nav-item"  routerLinkActive="active" >
         <a class="nav-link" [routerLink]="['/values']">Values</a>
       </li>
