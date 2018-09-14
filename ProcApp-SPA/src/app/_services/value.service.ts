@@ -26,4 +26,7 @@ export class ValueService {
     return this.http.get<Value>(this.baseUrl + 'values/' + id);
   }
 
+  updateValue(value: Value) {
+    return this.http.put(this.baseUrl + 'values/' + value.id, value);
+  }
 }

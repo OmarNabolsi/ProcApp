@@ -65,6 +65,8 @@ namespace ProcApp.API.Controllers
 
             _mapper.Map(valueForUpdateDto, valueFromRepo);
 
+            valueFromRepo.LastUpdated = DateTime.Now;
+
             if (await _repo.SaveAll())
                 return NoContent();
             

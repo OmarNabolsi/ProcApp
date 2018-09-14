@@ -21,7 +21,8 @@ export class ValueEditComponent implements OnInit {
   }
 
   constructor(private route: ActivatedRoute,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private valueService: ValueService
   ) { }
 
   ngOnInit() {
@@ -31,9 +32,12 @@ export class ValueEditComponent implements OnInit {
   }
 
   updateValue() {
-    console.log(this.value);
-    this.alertify.success('Value has been updated!');
-    this.editForm.reset(this.value);
+    this.valueService.updateValue(this.value).subscribe(next => {
+      this.alertify.success('Value has been updated!');
+      this.editForm.reset(this.value);
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 
 }
